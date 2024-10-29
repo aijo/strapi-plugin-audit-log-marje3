@@ -27,7 +27,7 @@ module.exports = ({ strapi }) => {
   strapi.server.use(async (ctx, next) => {
     await next();
 
-    const config = strapi.config.get(`plugin.${pluginId}`);
+    const config = strapi.config.get(`plugin::${pluginId}`);
 
     const endpoint = getFilterResult(
       config.filters.endpoint,
