@@ -1,7 +1,6 @@
 const _ = require("lodash");
 const pluginId = require("../utils/pluginId");
-const logger = require("./utils/logger");
-const dateFormat = require('date-fns');
+const createLogger = require("../utils/logger");
 
 const getFilterResult = (filter, actualValue, checkFunction) => {
   let result = true;
@@ -28,7 +27,7 @@ const replaceContents = (obj, excludedValues) =>
 module.exports = ({ strapi }) => {
   strapi.server.use(async (ctx, next) => {
     await next();
-
+    const auditLogger = await createLogger({ strapi });
     const config = strapi.config.get(`plugin::${pluginId}`);
 
     const endpoint = getFilterResult(
@@ -70,8 +69,17 @@ module.exports = ({ strapi }) => {
       strapi.entityService.create(`plugin::${pluginId}.log`, {
         data,
       });
+
+      const date = new Date();
+      const pad = (num) => num.toString().padStart(2, '0');
+      const day = pad(date.getDate());
+      const month = pad(date.getMonth() + 1);
+      const year = date.getFullYear();
+      const hours = pad(date.getHours());
+      const minutes = pad(date.getMinutes());
+      const seconds = pad(date.getSeconds());
       
-      const timestamp = dateFormat(new Date(), 'dd/MM/yyyy HH:mm:ss');
+      const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
       const logData = {
         timestamp,
         loggername: config.logger.appName,
@@ -90,7 +98,7 @@ module.exports = ({ strapi }) => {
       };
 
       const logMessage = Object.values(logData).join('|');
-      logger.info(logMessage);
+      auditLogger.info(logMessage);
     }
   });
 };

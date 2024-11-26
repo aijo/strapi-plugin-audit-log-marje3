@@ -2,13 +2,15 @@ const winston = require('winston');
 const pluginId = require("./pluginId");
 require('winston-syslog').Syslog;
 
+// Change to directly export the logger
 module.exports = async ({ strapi }) => {
   // Get Logger Setting
-  let host = await strapi.config.get(`plugin.${pluginId}`).logger.host || 'localhost';
-  let port = await strapi.config.get(`plugin.${pluginId}`).logger.port || 514;
-  let appName = await strapi.config.get(`plugin.${pluginId}`).logger.appName || 'strapi-audit-log';
+  const host = await strapi.config.get(`plugin::${pluginId}`).logger?.host || 'localhost';
+  const port = await strapi.config.get(`plugin::${pluginId}`).logger?.port || 514;
+  const appName = await strapi.config.get(`plugin::${pluginId}`).logger?.appName || 'strapi-audit-log';
 
-  winston.createLogger({
+  // Create logger with all methods explicitly defined
+  const logger = winston.createLogger({
     format: winston.format.combine(
       winston.format.timestamp(),
       winston.format.json()
@@ -31,4 +33,7 @@ module.exports = async ({ strapi }) => {
       })
     ]
   });
+
+  // Explicitly return the logger object
+  return logger;
 };
