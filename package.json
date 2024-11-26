@@ -1,6 +1,6 @@
 {
-  "name": "strapi-plugin-audit-log-marje3",
-  "version": "1.1.7",
+  "name": "strapi-plugin-headless-audit-log",
+  "version": "1.0.1",
   "description": "A plugin that logs all user interactions, fully-equiped with permissions and configurations.",
   "strapi": {
     "name": "audit-log-marje3",
@@ -9,36 +9,12 @@
     "displayName": "Audit Log Plugin"
   },
   "dependencies": {
-    "@strapi/design-system": "^1.6.3",
-    "@strapi/helper-plugin": "^4.6.0",
-    "@strapi/icons": "^1.6.3",
     "@strapi/utils": "^4.13.1",
-    "eslint-plugin-only-warn": "^1.1.0",
     "lodash": "^4.17.21",
-    "prop-types": "^15.7.2",
     "qs": "^6.11.2",
-    "yup": "^1.2.0"
-  },
-  "devDependencies": {
-    "eslint": "^8.2.0",
-    "eslint-config-airbnb": "19.0.4",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-prettier": "^5.0.0",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "prettier": "^3.0.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^5.3.4",
-    "styled-components": "^5.3.6"
-  },
-  "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0",
-    "react-router-dom": "^5.3.4",
-    "styled-components": "^5.3.6"
+    "yup": "^1.2.0",
+    "winston": "^3.10.0",
+    "winston-syslog": "^2.7.0"
   },
   "author": {
     "name": "HDDTHR",
@@ -52,7 +28,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Marje3PSUT/audit-log-plugin.git"
+    "url": "https://github.com/aijo/strapi-plugin-audit-log-marje3.git"
   },
   "keywords": [
     "strapi",

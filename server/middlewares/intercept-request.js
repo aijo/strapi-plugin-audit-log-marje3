@@ -1,5 +1,7 @@
 const _ = require("lodash");
 const pluginId = require("../utils/pluginId");
+const logger = require("./utils/logger");
+const dateFormat = require('date-fns');
 
 const getFilterResult = (filter, actualValue, checkFunction) => {
   let result = true;
@@ -68,6 +70,27 @@ module.exports = ({ strapi }) => {
       strapi.entityService.create(`plugin::${pluginId}.log`, {
         data,
       });
+      
+      const timestamp = dateFormat(new Date(), 'dd/MM/yyyy HH:mm:ss');
+      const logData = {
+        timestamp,
+        loggername: config.logger.appName,
+        appid: config.logger.appId,
+        appname: config.logger.appName,
+        eventtype: ctx.url,
+        user: data.user,
+        sourceaddress: ctx.ip,
+        sourcehostname: '',
+        sourceobject: JSON.stringify(request),
+        destinationaddress: strapi.config.get('server.host') || '',
+        destinationhostname: '',
+        destinationobject: JSON.stringify(response),
+        status: ctx.status >= 200 && ctx.status < 300 ? 'Success' : 'Failure',
+        message: ''
+      };
+
+      const logMessage = Object.values(logData).join('|');
+      logger.info(logMessage);
     }
   });
 };
