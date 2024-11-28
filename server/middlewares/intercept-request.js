@@ -24,6 +24,17 @@ const replaceContents = (obj, excludedValues) =>
     return value;
   });
 
+const getEventType = (url) => {
+  if (url.includes('login')) return 'LOGIN';
+  if (url.includes('logout')) return 'LOGOUT';
+  if (url.includes('publish')) return 'PUBLISH CONTENT';
+  if (url.includes('content-manager')) return 'UPDATE CONTENT';
+  if (url.includes('content-type-builder')) return 'UPDATE MODEL'
+  if (url.includes('bulk-delete')) return 'DELETE FILE';
+  if (url.includes('upload')) return 'UPLOAD FILE';
+  return 'OTHER';
+};
+
 module.exports = ({ strapi }) => {
   strapi.server.use(async (ctx, next) => {
     await next();
@@ -85,16 +96,18 @@ module.exports = ({ strapi }) => {
         loggername: config.logger.appName,
         appid: config.logger.appId,
         appname: config.logger.appName,
-        eventtype: ctx.url,
-        user: data.user,
+        eventtype: getEventType(ctx.url),
         sourceaddress: ctx.ip,
         sourcehostname: '',
-        sourceobject: JSON.stringify(request),
+        sourceuser: data.user,
+        sourceobject: '', //JSON.stringify(request),
         destinationaddress: strapi.config.get('server.host') || '',
         destinationhostname: '',
-        destinationobject: JSON.stringify(response),
+        destinationuser: data.user,
+        destinationobject: '', //JSON.stringify(response),
         status: ctx.status >= 200 && ctx.status < 300 ? 'Success' : 'Failure',
-        message: ''
+        message: '',
+        other: ''
       };
 
       const logMessage = Object.values(logData).join('|');
